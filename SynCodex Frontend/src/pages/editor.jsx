@@ -14,6 +14,8 @@ import { useFlowTracker } from "../hooks/useFlowTracker";
 import { useHealthTracker } from "../hooks/useHealthTracker";
 import ProximityDetectionProvider from "../components/editor/ProximityDetectionProvider";
 import InterviewRecorder from "../components/interview/InterviewRecorder";
+import { DefenseSidebar } from "../components/editor/DefenseSidebar";
+import { useSecurity } from "../context/SecurityContext";
 
 export default function EditorPage() {
   useMeta();
@@ -29,12 +31,14 @@ export default function EditorPage() {
   const [terminalHeight, setTerminalHeight] = useState(260);
   const [isResizingTerminal, setIsResizingTerminal] = useState(false);
   const [showInterviewRecorder, setShowInterviewRecorder] = useState(false);
+  const [showSecuritySidebar, setShowSecuritySidebar] = useState(true);
   const resizeStartYRef = useRef(0);
   const resizeStartHeightRef = useRef(0);
   const editorRef = useRef(null);
   const editorContainerRef = useRef(null);
 
   const { projectId } = useParams();
+  const { analyzeCode } = useSecurity();
 
   const { statusIcon } = useFlowTracker(editorRef);
   const healthData = useHealthTracker(editorRef);
@@ -61,6 +65,15 @@ export default function EditorPage() {
   useEffect(() => {
     setShowPreview(false);
   }, [activeFile?.name]);
+
+  // Analyze code for security issues
+  useEffect(() => {
+    if (code && code.trim().length > 0) {
+      const language = detectLang(activeFile);
+      const fileName = activeFile?.name || 'current.js';
+      analyzeCode(code, fileName, language);
+    }
+  }, [code, analyzeCode, activeFile]);
 
   const handlePreviewClick = () => setShowPreview((prev) => !prev);
   const handleClosePreview = () => setShowPreview(false);
@@ -178,43 +191,48 @@ export default function EditorPage() {
             />
           </div>
 
-          <div className="editor-pane-container">
-            <div className="editor-pane-wrapper">
-              <div
-                className={`editor-pane-main ${
-                  showPreview ? "split-view" : "full-width"
-                }`}
-              >
-                <EditorPane ref={editorRef} activeFile={activeFile} onCodeChange={setCode} projectId={projectId}/>
+          <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
+            <div className="editor-pane-container" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div className="editor-pane-wrapper">
+                <div
+                  className={`editor-pane-main ${
+                    showPreview ? "split-view" : "full-width"
+                  }`}
+                >
+                  <EditorPane ref={editorRef} activeFile={activeFile} onCodeChange={setCode} projectId={projectId}/>
+                </div>
+
+                {showPreview && (
+                  <div className="editor-preview-pane">
+                    <HtmlPreview rawHtml={code} onClose={handleClosePreview} />
+                  </div>
+                )}
               </div>
 
-              {showPreview && (
-                <div className="editor-preview-pane">
-                  <HtmlPreview rawHtml={code} onClose={handleClosePreview} />
-                </div>
+              {isTerminalVisible && (
+                <>
+                  <div
+                    role="separator"
+                    aria-label="Resize terminal pane"
+                    onMouseDown={handleTerminalResizeStart}
+                    className="panel-resize-handle"
+                  />
+                  <div className="editor-terminal" style={{ height: `${terminalHeight}px` }}>
+                    <TerminalComponent
+                      projectId={projectId}
+                      output={output}
+                      isRunning={isRunning}
+                      onClose={() => setIsTerminalVisible(false)}
+                    />
+                  </div>
+                </>
               )}
             </div>
 
-            {isTerminalVisible && (
-              <>
-                <div
-                  role="separator"
-                  aria-label="Resize terminal pane"
-                  onMouseDown={handleTerminalResizeStart}
-                  className="panel-resize-handle"
-                />
-                <div className="editor-terminal" style={{ height: `${terminalHeight}px` }}>
-                  <TerminalComponent
-                    projectId={projectId}
-                    output={output}
-                    isRunning={isRunning}
-                    onClose={() => setIsTerminalVisible(false)}
-                  />
-                </div>
-              </>
-            )}
+            {/* Security Sidebar */}
+            {showSecuritySidebar && <DefenseSidebar />}
           </div>
-          </div>
+        </div>
         </div>
         {showInterviewRecorder && (
           <InterviewRecorder onClose={() => setShowInterviewRecorder(false)} />

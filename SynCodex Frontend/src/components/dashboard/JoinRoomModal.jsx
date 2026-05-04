@@ -1,7 +1,6 @@
 import { X, LogIn, Shield, AlertCircle, CheckCircle, Loader } from "lucide-react";
 import { toast } from "react-toastify";
 import {useState} from "react";
-import InterviewRecorder from "../interview/InterviewRecorder";
 import axios from "axios";
 
 export default function JoinRoomModal({ onClose }) {
@@ -11,12 +10,13 @@ export default function JoinRoomModal({ onClose }) {
   const [isInterviewMode, setIsInterviewMode] = useState(false);
   const [roomAvail, setRoomAvail] = useState(false);
   const [hostEmail, setHostEmail] = useState(null);
-  const [showInterviewRecorder, setShowInterviewRecorder] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [focused, setFocused] = useState(false);
 
   const checkRoom = async () => {
-    if (!joinRoomId.trim()) {
+    const roomId = joinRoomId.trim();
+
+    if (!roomId) {
       toast.error("Please Enter Room ID To Join.");
       return;
     }
@@ -25,11 +25,13 @@ export default function JoinRoomModal({ onClose }) {
     try {
       const res = await axios.post(
         "http://localhost:5000/api/rooms/check-room",
-        {roomId: joinRoomId }
+        { roomId },
+        { validateStatus: (status) => status < 500 }
       );
 
       if (res.status === 404) {
         setSubmitButton("Check Room");
+        setRoomAvail(false);
         toast.error("Room Not Found.");
         return;
       }
@@ -38,18 +40,21 @@ export default function JoinRoomModal({ onClose }) {
         setRoomAvail(true);
         setHostEmail(res.data.ownerEmail);
         setIsInterviewMode(res.data.isInterviewMode);
-        setRoomName(res.data.name || joinRoomId);
+        setRoomName(res.data.name || roomId);
         console.log("Room found :: ", res.data);
       }
     } catch (error) {
       console.error("Room Checking Failed:", error);
+      setRoomAvail(false);
       toast.error("Failed to check room. It may not exist.");
       setSubmitButton("Check Room");
     } 
   };
 
    const joinRoom = async () => {
-    if (!joinRoomId.trim()) {
+    const roomId = joinRoomId.trim();
+
+    if (!roomId) {
       toast.error("Please Enter Room ID To Join.");
       return;
     }
@@ -58,7 +63,7 @@ export default function JoinRoomModal({ onClose }) {
       const res = await axios.post(
         "http://localhost:5000/api/rooms/join-room",
         {
-          roomId: joinRoomId.trim(),
+          roomId,
           email: localStorage.getItem("email"),
           creatorEmail: hostEmail,
         }
@@ -68,25 +73,19 @@ export default function JoinRoomModal({ onClose }) {
         toast.success("Room Joined Successfully!");
         setSubmitButton("Check Room");
         if (isInterviewMode) {
-          localStorage.setItem(
-            "collabActions",
-            JSON.stringify({
-              ...JSON.parse(localStorage.getItem("collabActions") || "{}"),
-              [joinRoomId]: { action: "joined", hostEmail: hostEmail },
-            })
-          );
-          setShowInterviewRecorder(true);
-        } else {
-          localStorage.setItem(
-            "collabActions",
-            JSON.stringify({
-              ...JSON.parse(localStorage.getItem("collabActions") || "{}"),
-              [joinRoomId]: { action: "joined", hostEmail: hostEmail },
-            })
-          );
-
-          window.open(`/collab-editor/${joinRoomId}`, "_blank");
+          sessionStorage.setItem("roomId", roomId);
         }
+
+        localStorage.setItem(
+          "collabActions",
+          JSON.stringify({
+            ...JSON.parse(localStorage.getItem("collabActions") || "{}"),
+            [roomId]: { action: "joined", hostEmail: hostEmail, isInterviewMode },
+          })
+        );
+
+        window.open(`/collab-editor/${roomId}`, "_blank");
+        onClose();
       }
     } catch (error) {
       console.error("Room Join Failed:", error);
@@ -97,19 +96,8 @@ export default function JoinRoomModal({ onClose }) {
   };
 
   return (
-    <>
-      {showInterviewRecorder ? (
-        <InterviewRecorder 
-          roomId={joinRoomId}
-          roomName={roomName}
-          onClose={() => {
-            setShowInterviewRecorder(false);
-            onClose();
-          }} 
-        />
-      ) : (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700/50">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700/50">
             
             {/* Header Section */}
             <div className="relative px-8 pt-8 pb-6 border-b border-slate-700/30">
@@ -140,7 +128,7 @@ export default function JoinRoomModal({ onClose }) {
                   <input 
                     type="text" 
                     value={joinRoomId} 
-                    onChange={(e) => setJoinRoomId(e.target.value.toUpperCase())}
+                    onChange={(e) => setJoinRoomId(e.target.value)}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     placeholder="Enter 8-character code" 
@@ -193,7 +181,7 @@ export default function JoinRoomModal({ onClose }) {
                 ) : (
                   <>
                     <LogIn size={18} />
-                    <span>{roomAvail ? 'Join Room' : 'Check Room'}</span>
+                    <span>{submitButton}</span>
                   </>
                 )}
               </button>
@@ -208,7 +196,5 @@ export default function JoinRoomModal({ onClose }) {
 
           </div>
         </div>
-      )}
-    </>
   );
 }

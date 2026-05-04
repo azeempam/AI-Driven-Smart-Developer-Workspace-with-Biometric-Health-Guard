@@ -1,4 +1,4 @@
-import { Play, Video, VideoOff, Mic } from "lucide-react";
+import { Play, Video, VideoOff, Mic, PenLine } from "lucide-react";
 import { VscOpenPreview } from "react-icons/vsc";
 import HealthStatusBar from "../HealthStatusBar";
 import ProximityStatusIndicator from "./ProximityStatusIndicator";
@@ -15,6 +15,8 @@ export default function EditorNav({
   showVideoPanel,
   onToggleVideoPanel,
   onInterviewClick,
+  showWhiteboard,
+  onWhiteboardClick,
 }) {
   return (
     <header className="h-12 shrink-0 bg-[#181a1f] border-b border-[#2d2d2d] flex items-center justify-between px-5 select-none z-50 shadow-sm relative">
@@ -61,6 +63,22 @@ export default function EditorNav({
       {/* Right Region: Integration Hooks */}
       <div className="flex items-center justify-end min-w-[300px] gap-3">
         <ProximityStatusIndicator />
+        {onWhiteboardClick && (
+          <button
+            id="whiteboard-toggle-btn"
+            onClick={onWhiteboardClick}
+            title="Toggle Collaborative Whiteboard"
+            type="button"
+            className={`flex items-center gap-2 px-3 py-[5px] rounded text-[12px] font-semibold transition-all border ${
+              showWhiteboard
+                ? "bg-indigo-500/25 text-indigo-300 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.2)]"
+                : "bg-[#1f2437] text-slate-300 border-white/10 hover:border-indigo-500/30 hover:text-indigo-300"
+            }`}
+          >
+            <PenLine size={14} />
+            Whiteboard
+          </button>
+        )}
         {onInterviewClick && (
           <button
             onClick={onInterviewClick}

@@ -36,7 +36,12 @@ export const useYjsProvider = (roomId) => {
         // 3. Configure Decentralized WebRTC Engine (Peer-to-Peer)
         // Signaling server is purely for ICE metadata handshake, bypassing DBs.
         const webrtcProvider = new WebrtcProvider(roomId, doc, {
-            signaling: ['wss://signaling.yjs.dev', 'wss://y-webrtc-signaling-eu.herokuapp.com'],
+            signaling: [
+              'wss://signaling.yjs.dev', // Official public signaling server
+              'wss://y-webrtc-signaling-eu.herokuapp.com', // Fallback EU server
+              'wss://y-webrtc-signaling-us.herokuapp.com', // Fallback US server
+              'ws://localhost:4444'   // Local fallback for stability
+            ],
             password: 'securesphere-p2p' // End-to-End Encryption Key
         });
 

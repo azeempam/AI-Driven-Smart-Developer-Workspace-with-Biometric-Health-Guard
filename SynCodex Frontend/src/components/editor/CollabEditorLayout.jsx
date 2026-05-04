@@ -17,6 +17,10 @@ import EyeCareWidget from "../EyeCareWidget";
 import SystemHealthWidget from "../SystemHealthWidget";
 import AIAssistantSidebar from "../interview/AIAssistantSidebar";
 import InterviewRecorder from "../interview/InterviewRecorder";
+import { ErgonomicsProvider } from "../../context/ErgonomicsContext";
+import { PostureWidget } from "../PostureWidget";
+import WhiteboardPanel from "../whiteboard/WhiteboardPanel";
+
 export default function CollabEditorLayout({ roomId, isInterviewMode }) {
   const [openFiles, setOpenFiles] = useState([]);
   const [activeFile, setActiveFile] = useState(null);
@@ -32,6 +36,8 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
   const [localStreamForAI, setLocalStreamForAI] = useState(null);
   const [showInterviewRecorder, setShowInterviewRecorder] = useState(false);
   const [showVideoPanel, setShowVideoPanel] = useState(true);
+  const [showWhiteboard, setShowWhiteboard] = useState(false);
+
 
   // --- Eye Care Timer Integration ---
   const { 
@@ -143,7 +149,7 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
   };
 
   return (
-    <>
+    <ErgonomicsProvider>
       {/* Eye Care Overlay will show up when isBreakMode is true */}
       <EyeCareOverlay isVisible={isBreakMode} onResume={resumeCoding} />
       
@@ -161,6 +167,8 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
         showVideoPanel={showVideoPanel}
         onToggleVideoPanel={() => setShowVideoPanel((value) => !value)}
         onInterviewClick={() => setShowInterviewRecorder(true)}
+        showWhiteboard={showWhiteboard}
+        onWhiteboardClick={() => setShowWhiteboard((v) => !v)}
       />
 
       {/* Main Layout Container - Changed to flex-col to accommodate Performance Monitor footer */}
@@ -331,6 +339,18 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
           roomName={sessionName}
         />
       )}
-    </>
+
+      {/* Collaborative Whiteboard Panel — Portal-rendered, Y.js synced */}
+      <WhiteboardPanel
+        yDoc={yDoc}
+        provider={provider}
+        roomId={roomId}
+        isOpen={showWhiteboard}
+        onClose={() => setShowWhiteboard(false)}
+      />
+
+      {/* Privacy-First Posture Assistant Widget */}
+      <PostureWidget />
+    </ErgonomicsProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/login";
 import Homepage from "./pages/homepage";
 import Signup from "./pages/sinup";
@@ -13,6 +13,7 @@ import ResetPassword from "./pages/resetPassword";
 import Dashboard from "./pages/dashboard";
 import { UserProvider } from "./context/UserContext";
 import { InterviewProvider } from "./context/InterviewContext";
+import { SecurityProvider } from "./context/SecurityContext";
 import EditorPage from "./pages/editor";
 import InterviewEditorPage from "./pages/interviewEditor";
 import CollabEditorPage from "./pages/collabEditor";
@@ -22,6 +23,7 @@ function App() {
   return (
     <UserProvider>
       <InterviewProvider>
+        <SecurityProvider>
         <ToastContainer
           position="top-center"
           autoClose={2500}
@@ -48,8 +50,17 @@ function App() {
             <Route path="/interview-editor/:roomId" element={<ProtectedRoute> <InterviewEditorPage /> </ProtectedRoute>} />
             <Route path="/collab-editor/:roomId" element={<ProtectedRoute> <CollabEditorPage /> </ProtectedRoute>} />
             <Route path="/interview-guidelines" element={<ProtectedRoute> <InterviewGuidelines /> </ProtectedRoute>} />
+            
+            {/* Fallback routes for missing IDs */}
+            <Route path="/collab-editor" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/editor" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/interview-editor" element={<Navigate to="/dashboard" replace />} />
+            
+            {/* Catch-all route for any other undefined paths */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
+        </SecurityProvider>
       </InterviewProvider>
     </UserProvider>
   );
