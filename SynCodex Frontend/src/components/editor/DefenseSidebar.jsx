@@ -62,62 +62,26 @@ export function DefenseSidebar() {
   const rating = getRatingText(defenseScore);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        backgroundColor: '#18181b',
-        borderLeft: '1px solid #3f3f46',
-        padding: '16px',
-        gap: '16px',
-        overflowY: 'auto',
-        minWidth: '280px',
-        maxWidth: '350px',
-        fontSize: '13px',
-      }}
-    >
-      {/* Header */}
-      <div>
-        <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#f4f4f5', margin: 0 }}>
-          🛡️ SecureSphere
-        </h2>
-        <p style={{ fontSize: '11px', color: '#a1a1a1', margin: '4px 0 0 0' }}>
-          AI Bug Detection
-        </p>
+    <aside className="editor-defense-sidebar">
+      <div className="editor-defense-header">
+        <div>
+          <div className="editor-defense-kicker">SecureSphere</div>
+          <h2 className="editor-defense-title">Security Scan</h2>
+        </div>
+        <div className="editor-defense-score" style={{ borderColor: `${color}55`, color }}>
+          {Math.round(defenseScore)}
+        </div>
       </div>
 
-      {/* Error Display */}
       {error && (
-        <div
-          style={{
-            padding: '12px',
-            backgroundColor: '#7f1d1d',
-            borderRadius: '6px',
-            color: '#fecaca',
-            fontSize: '11px',
-          }}
-        >
-          ⚠️ {error}
+        <div className="editor-defense-alert">
+          {error}
         </div>
       )}
 
-      {/* Defense Score Gauge */}
       {!error && (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '16px',
-            backgroundColor: '#27272a',
-            borderRadius: '8px',
-            borderLeft: `4px solid ${color}`,
-          }}
-        >
-          {/* Score Circle */}
-          <div style={{ position: 'relative', width: '96px', height: '96px' }}>
+        <div className="editor-defense-card editor-defense-gauge">
+          <div className="editor-defense-ring" style={{ borderColor: `${color}55` }}>
             <svg width={96} height={96} style={{ position: 'absolute' }}>
               <circle cx={48} cy={48} r={40} fill='none' stroke='#3f3f46' strokeWidth={2} />
             </svg>
@@ -134,7 +98,7 @@ export function DefenseSidebar() {
                 style={{ transition: 'stroke-dasharray 0.3s ease' }}
               />
             </svg>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+            <div className="editor-defense-ring-value">
               <div style={{ fontSize: '28px', fontWeight: 'bold', color }}>
                 {Math.round(defenseScore)}
               </div>
@@ -142,22 +106,19 @@ export function DefenseSidebar() {
             </div>
           </div>
 
-          {/* Rating */}
-          <div style={{ textAlign: 'center' }}>
+          <div className="editor-defense-rating-wrap" style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '14px', fontWeight: 'semibold', color, marginBottom: '4px' }}>
               {rating}
             </div>
             <p style={{ fontSize: '11px', color: '#737373', margin: 0 }}>Security Rating</p>
           </div>
 
-          {/* Analyzing */}
-          {isAnalyzing && <div style={{ fontSize: '12px', color: '#f59e0b' }}>🔄 Analyzing...</div>}
+          {isAnalyzing && <div style={{ fontSize: '12px', color: '#f59e0b' }}>Analyzing...</div>}
         </div>
       )}
 
-      {/* Vulnerability Breakdown */}
       {vulnerabilities.length > 0 && (
-        <div style={{ padding: '12px', backgroundColor: '#27272a', borderRadius: '6px' }}>
+        <div className="editor-defense-card">
           <h4 style={{ fontSize: '12px', fontWeight: 'semibold', marginBottom: '8px', color: '#d4d4d8', margin: 0 }}>
             Breakdown
           </h4>
@@ -190,7 +151,6 @@ export function DefenseSidebar() {
         </div>
       )}
 
-      {/* Controls */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <button
           onClick={handleToggle}
@@ -228,7 +188,6 @@ export function DefenseSidebar() {
         )}
       </div>
 
-      {/* Vulnerabilities List */}
       <div>
         <h3 style={{ fontSize: '12px', fontWeight: 'semibold', marginBottom: '8px', color: '#d4d4d8', margin: '0 0 8px 0' }}>
           Issues Found ({vulnerabilities.length})
@@ -277,7 +236,7 @@ export function DefenseSidebar() {
           )}
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
 

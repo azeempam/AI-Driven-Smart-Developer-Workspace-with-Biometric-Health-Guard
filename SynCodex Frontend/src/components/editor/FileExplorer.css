@@ -5,8 +5,8 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  background-color: var(--secondary-bg);
-  border-right: 1px solid var(--border-color);
+  background: linear-gradient(180deg, rgba(16, 24, 42, 0.95), rgba(12, 18, 34, 0.92));
+  border-right: 1px solid var(--surface-border);
   min-width: 280px;
   max-width: 280px;
   font-size: var(--font-size-sm);
@@ -25,12 +25,12 @@
 }
 
 .file-explorer-modal-content {
-  background-color: var(--tertiary-bg);
+  background: linear-gradient(180deg, rgba(24, 35, 58, 0.98), rgba(16, 24, 42, 0.98));
   padding: var(--space-lg);
-  border-radius: var(--rounded-lg);
+  border-radius: 18px;
   width: 35%;
   box-shadow: var(--shadow-xl);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--surface-border);
 }
 
 .file-explorer-modal-title {
@@ -106,17 +106,17 @@
   height: 5rem;
   overflow: clip;
   color: var(--primary-text);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-size: 1rem;
+  font-weight: 700;
   display: flex;
   align-items: flex-end;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--surface-border);
 }
 
 /* Search Bar */
 .file-explorer-search {
   padding: var(--space-sm) var(--space-md);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--surface-border);
 }
 
 .file-explorer-search-wrapper {
@@ -134,7 +134,7 @@
 
 .file-explorer-search-input {
   width: 100%;
-  background-color: var(--tertiary-bg);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--primary-text);
   padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-xl);
   border-radius: var(--rounded-md);
@@ -164,7 +164,7 @@
   align-items: center;
   gap: var(--space-lg);
   padding: var(--space-md) var(--space-md);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--surface-border);
 }
 
 .file-explorer-buttons {

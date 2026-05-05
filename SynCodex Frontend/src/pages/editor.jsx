@@ -147,10 +147,11 @@ export default function EditorPage() {
           isHtmlFile={!!isHtmlFile}
           flowStatus={statusIcon}
           healthData={healthData}
+          projectName={projectName}
           onInterviewClick={() => setShowInterviewRecorder(true)}
         />
 
-        <div className="editor-main">
+        <div className="editor-main editor-shell-grid">
           <nav className={`editor-sidebar ${isSidebarOpen ? "open" : "closed"}`}>
           {isSidebarOpen && (
             <FileExplorer

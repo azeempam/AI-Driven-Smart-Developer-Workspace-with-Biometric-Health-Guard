@@ -12,13 +12,14 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
+  padding: 0.7rem 0.95rem;
   cursor: pointer;
   color: var(--secondary-text);
   font-size: var(--font-size-sm);
-  background-color: transparent;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
   border: none;
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--surface-border);
+  border-top: 1px solid transparent;
   white-space: nowrap;
   transition: all var(--transition-base);
   position: relative;
@@ -27,13 +28,13 @@
 
 .editor-tab:hover {
   color: var(--primary-text);
-  background-color: var(--hover-bg);
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 .editor-tab.active {
   color: var(--accent-primary);
-  background-color: var(--hover-bg);
-  border-bottom: 2px solid var(--accent-primary);
+  background: linear-gradient(135deg, rgba(127, 232, 255, 0.12), rgba(109, 124, 255, 0.1));
+  border-bottom: 2px solid rgba(127, 232, 255, 0.75);
 }
 
 .editor-tab.active::after {
