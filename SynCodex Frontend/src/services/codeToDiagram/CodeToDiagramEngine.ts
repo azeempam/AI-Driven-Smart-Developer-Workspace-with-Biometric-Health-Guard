@@ -24,7 +24,7 @@ import {
   ErrorType,
   CacheStatistics,
   DiagramPerformanceMetrics,
-} from '../types/CODE_TO_DIAGRAM_TYPES';
+} from '../../types/CODE_TO_DIAGRAM_TYPES';
 
 export class CodeToDiagramEngine implements ICodeToDiagramEngine {
   private config: EngineConfig;

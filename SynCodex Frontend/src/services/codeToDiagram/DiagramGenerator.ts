@@ -17,7 +17,7 @@ import {
   DiagramNodeType,
   DiagramEdgeType,
   DiagramTheme,
-} from '../types/CODE_TO_DIAGRAM_TYPES';
+} from '../../types/CODE_TO_DIAGRAM_TYPES';
 
 export class DiagramGenerator {
   private nodeCounter = 0;

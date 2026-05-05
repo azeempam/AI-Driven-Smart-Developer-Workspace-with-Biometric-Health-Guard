@@ -70,99 +70,123 @@ const SignUP = () => {
       <Scroll />
       <Navbar hideStartCoding={true} />
 
-      <div className="flex items-center justify-center p-10 bg-[#21232F] text-white">
+      <div className="auth-container">
         <motion.div
-          initial={{ opacity: 0.4, scale: 0.7 }}
+          initial={{ opacity: 0.4, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
             duration: 0.5,
             ease: easeInOut,
           }}
+          className="w-full"
         >
-          <div className="w-full max-w-3xl bg-[#3D415A] p-6 rounded-2xl border-3 border-blue-500 shadow-lg flex flex-col md:flex-row items-center animate-glow transition-all duration-500 hover:border-blue-400">
-            <div className="flex flex-col items-center text-center md:w-1/2 p-6">
-              <img src={SignupNow} alt="Secure Sign UP" className="w-50 mb-4" />
-              <h2 className="text-xl font-semibold">
-                Join <span className="font-gradient">SynCodex</span> now.
-              </h2>
-              <p className="text-gray-300 w-78">
-                code smarter, collaborate faster, and innovate together
-                seamlessly
-              </p>
+          <div className="auth-card flex flex-col md:flex-row gap-8 md:gap-0">
+            {/* Left Side - Illustration & Message */}
+            <div className="flex flex-col items-center justify-center md:w-1/2 md:border-r md:border-[var(--border-color)] md:pr-8">
+              <img src={SignupNow} alt="Join SynCodex" className="auth-icon" />
+              <div className="auth-header">
+                <h2 className="text-xl font-semibold text-[var(--primary-text)]">
+                  Join <span className="gradient-text">SynCodex</span> today
+                </h2>
+                <p className="text-[var(--tertiary-text)] text-sm mt-2">
+                  Code smarter, collaborate faster, innovate together seamlessly
+                </p>
+              </div>
             </div>
 
-            <div className="md:w-1/2 w-full p-6">
-              <h2 className="text-2xl font-bold mb-4">Sign UP</h2>
-              <form onSubmit={handleSubmit}>
-                <label htmlFor="fullName" className="block text-gray-300 text-sm mb-1">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  name="fullName"
-                  onChange={handleChange}
-                  className={`w-full p-2 rounded-lg ${AppColors.inputFieldColor} text-white focus:outline-none`}
-                  required
-                />
+            {/* Right Side - Signup Form */}
+            <div className="md:w-1/2 md:pl-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <h2 className="auth-title mb-0">Create Account</h2>
+                </div>
 
-                <label htmlFor="email" className="block text-gray-300 text-sm mt-3 mb-1">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  onChange={handleChange}
-                  className={`w-full p-2 rounded-lg ${AppColors.inputFieldColor} text-white focus:outline-none`}
-                  required
-                />
-
-                <label htmlFor="password" className="block text-gray-300 text-sm mt-3 mb-1">
-                  Password
-                </label>
-                <div className="relative w-full">
+                <div className="form-group">
+                  <label htmlFor="fullName" className="form-label">
+                    Full Name
+                  </label>
                   <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    name="password"
+                    id="fullName"
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
                     onChange={handleChange}
-                    className={`w-full p-2 rounded-lg ${AppColors.inputFieldColor} text-white focus:outline-none pr-10`}
+                    placeholder="John Doe"
+                    className="form-input"
                     required
                   />
+                </div>
 
-                  <button
-                    type="button"
-                    name="Toggle password visibility"
-                    title="Toggle password visibility"
-                    className="absolute right-3 top-2 p-1 text-gray-400 hover:text-white transition cursor-pointer"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
+                <div className="form-group">
+                  <label htmlFor="email" className="form-label">
+                    Email Address
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    className="form-input"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="••••••••"
+                      className="form-input pr-10"
+                      required
+                    />
+                    <button
+                      type="button"
+                      name="Toggle password visibility"
+                      title="Toggle password visibility"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--tertiary-text)] hover:text-[var(--primary-text)] transition cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                  <p className="text-xs text-[var(--tertiary-text)] mt-2">
+                    Must contain 8+ characters, uppercase, number & special character
+                  </p>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-4 bg-gradient-to-r from-[#94FFF2] to-[#506DFF] text-white py-2 rounded-lg hover:opacity-90 cursor-pointer font-bold flex items-center justify-center gap-2 relative"
+                  className="btn btn-primary w-full flex justify-center gap-2 relative"
                   disabled={loading}
                 >
                   {loading ? (
-                    <div className="w-5 h-5 border-2 my-0.5 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <>
+                      <div className="spinner"></div>
+                      <span>Creating account...</span>
+                    </>
                   ) : (
-                    "Register"
+                    "Create Account"
                   )}
                 </button>
 
-                <hr className="mt-3 border-gray-500" />
-              </form>
+                <div className="auth-divider"></div>
 
-              <p className="text-sm text-gray-300 mt-4">
-                Already have an account?{" "}
-                <Link to="/login" className="font-gradient ">
-                  Login
-                </Link>
-              </p>
+                <div className="auth-footer">
+                  Already have an account?{" "}
+                  <Link to="/login" className="auth-link">
+                    Login
+                  </Link>
+                </div>
+              </form>
             </div>
           </div>
         </motion.div>

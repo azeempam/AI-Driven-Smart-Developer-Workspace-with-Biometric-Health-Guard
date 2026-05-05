@@ -9,6 +9,7 @@ import { CollabEditorPane } from "./CollabEditorPane";
 import { useYjsProvider } from "../../hooks/useYjsProvider";
 import CodeExecutionResult from "./CodeExecutionResult";
 import HtmlPreview from "./HtmlPreview";
+import DiagramPanel from "./DiagramPanel";
 import { runCode } from "../../services/codeExec";
 import axios from "axios";
 import useEyeCareTimer from "../../hooks/useEyeCareTimer";
@@ -32,6 +33,9 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
   const [showOutput, setShowOutput] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showDiagram, setShowDiagram] = useState(true);
+  const [currentCode, setCurrentCode] = useState("");
+  const [currentLanguage, setCurrentLanguage] = useState("plaintext");
   const [aiOpen, setAiOpen] = useState(false);
   const [localStreamForAI, setLocalStreamForAI] = useState(null);
   const [showInterviewRecorder, setShowInterviewRecorder] = useState(false);
@@ -95,6 +99,9 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
 
   useEffect(() => {
     setShowPreview(false);
+    // Update language when active file changes
+    const lang = detectLang(activeFile);
+    setCurrentLanguage(lang);
   }, [activeFile?.name]);
 
   useEffect(() => {
@@ -105,6 +112,18 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
       sessionStorage.setItem(aiKey, "1");
     }
   }, [roomId]);
+
+  const handleCodeChange = (code) => {
+    setCurrentCode(code);
+  };
+
+  // Update current code from editor when active file changes
+  useEffect(() => {
+    if (collabEditorRef.current) {
+      const code = collabEditorRef.current.getCode();
+      setCurrentCode(code);
+    }
+  }, [activeFile]);
 
   const handlePreviewClick = () => setShowPreview((prev) => !prev);
   const handleClosePreview = () => setShowPreview(false);
@@ -169,6 +188,8 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
         onInterviewClick={() => setShowInterviewRecorder(true)}
         showWhiteboard={showWhiteboard}
         onWhiteboardClick={() => setShowWhiteboard((v) => !v)}
+        showDiagram={showDiagram}
+        onToggleDiagram={() => setShowDiagram((v) => !v)}
       />
 
       {/* Main Layout Container - Changed to flex-col to accommodate Performance Monitor footer */}
@@ -244,10 +265,11 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
               <div
                 className={`pt-3 pb-${
                   showOutput ? "0" : "3"
-                } pr-2 h-full w-full flex flex-col justify-center`}
+                } pr-2 h-full flex flex-col justify-center`}
                 style={{
-                  width: isInterviewMode || !showVideoPanel ? "100%" : "70%",
+                  width: isInterviewMode || !showVideoPanel ? (showDiagram ? "70%" : "100%") : "50%",
                   transition: isInterviewMode ? "none" : "width 0.3s ease",
+                  flexShrink: 0,
                 }}
               >
                 <div
@@ -279,10 +301,28 @@ export default function CollabEditorLayout({ roomId, isInterviewMode }) {
                 )}
               </div>
 
+              {/* Diagram Panel Section */}
+              {showDiagram && (
+                <div
+                  style={{
+                    width: isInterviewMode || !showVideoPanel ? "30%" : "20%",
+                    flexShrink: 0,
+                    transition: isInterviewMode ? "none" : "width 0.3s ease",
+                  }}
+                >
+                  <DiagramPanel
+                    code={currentCode}
+                    language={currentLanguage}
+                    isOpen={showDiagram}
+                    onClose={() => setShowDiagram(false)}
+                  />
+                </div>
+              )}
+
               {/* Video Call Section */}
               <div
                 style={{
-                  width: !showVideoPanel ? 0 : isInterviewMode ? "auto" : "30%",
+                  width: !showVideoPanel ? 0 : isInterviewMode ? "auto" : "20%",
                   flexShrink: 0,
                   transition: isInterviewMode ? "none" : "width 0.3s ease",
                   display: showVideoPanel ? 'flex' : 'none'

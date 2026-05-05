@@ -9,29 +9,116 @@
   --font-open-sans: "Open Sans", serif;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(180deg, #070b16 0%, #0b1020 35%, #0a1020 100%);
+  color: var(--primary-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  -ms-overflow-style: none;  
+  scrollbar-width: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(127, 232, 255, 0.2);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(127, 232, 255, 0.4);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+}
+
+a {
+  transition: all 0.2s ease;
+}
+
+/* Background Classes */
 .bg1 {
   background-image: url("./assets/background.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top left;
-  background-color: #21232f;
+  background-color: var(--primary-bg);
 }
 
-::-webkit-scrollbar {
-  display: none;
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 }
 
-body {
-  -ms-overflow-style: none;  
-  scrollbar-width: none;     
-}
-
-.font-gradient{
-  background-image: linear-gradient(to right, #94FFF2, #506DFF);
+/* Gradients */
+.font-gradient,
+.gradient-text {
+  background-image: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   color: transparent;
   background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+/* Editor Wrapper */
 .editor-wrapper {
   border-radius: 10px;
   overflow: hidden;
@@ -43,30 +130,41 @@ body {
   text-overflow: ellipsis;
 }
 
+/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #21232f;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #3D415A;
+  background: rgba(16, 24, 42, 0.5);
   border-radius: 4px;
 }
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(127, 232, 255, 0.2);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #4a4f6d;
+  background: rgba(127, 232, 255, 0.4);
 }
 
 .custom-scrollbar {
-  scrollbar-color: #3D415A #21232f;
+  scrollbar-color: rgba(127, 232, 255, 0.2) rgba(16, 24, 42, 0.5);
   scrollbar-width: thin;
 }
 
-html {
-  scrollbar-color: #3D415A #21232f;
-  scrollbar-width: thin;
+/* Focus States */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
 }

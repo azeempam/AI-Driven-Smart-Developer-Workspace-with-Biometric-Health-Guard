@@ -1,4 +1,4 @@
-import { Play, Video, VideoOff, Mic, PenLine, Sparkles, ShieldCheck } from "lucide-react";
+import { Play, Video, VideoOff, Mic, PenLine, Sparkles, ShieldCheck, Grid3x3 } from "lucide-react";
 import { VscOpenPreview } from "react-icons/vsc";
 import HealthStatusBar from "../HealthStatusBar";
 import ProximityStatusIndicator from "./ProximityStatusIndicator";
@@ -17,6 +17,8 @@ export default function EditorNav({
   onInterviewClick,
   showWhiteboard,
   onWhiteboardClick,
+  showDiagram,
+  onToggleDiagram,
 }) {
   return (
     <header className="editor-nav-shell select-none z-50 relative">
@@ -74,6 +76,21 @@ export default function EditorNav({
           >
             <PenLine size={14} />
             Whiteboard
+          </button>
+        )}
+        {onToggleDiagram && (
+          <button
+            onClick={onToggleDiagram}
+            title={showDiagram ? "Hide diagram" : "Show code diagram"}
+            type="button"
+            className={`editor-nav-chip ${
+              showDiagram
+                ? "is-active"
+                : ""
+            }`}
+          >
+            <Grid3x3 size={14} />
+            Diagram
           </button>
         )}
         {onInterviewClick && (

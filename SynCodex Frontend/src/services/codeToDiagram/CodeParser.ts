@@ -19,7 +19,7 @@ import {
   ASTNodeType,
   Parameter,
   CallNode,
-} from '../types/CODE_TO_DIAGRAM_TYPES';
+} from '../../types/CODE_TO_DIAGRAM_TYPES';
 
 export class CodeParser {
   /**

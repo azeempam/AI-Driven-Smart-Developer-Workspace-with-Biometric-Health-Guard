@@ -12,7 +12,7 @@ import {
   FunctionDefinition,
   CallNode,
   ControlFlowBranch,
-} from '../types/CODE_TO_DIAGRAM_TYPES';
+} from '../../types/CODE_TO_DIAGRAM_TYPES';
 
 export class ASTBuilder {
   private nodeIdCounter = 0;

@@ -12,110 +12,102 @@ const Navbar = ({ hideStartCoding }) => {
 
   return (
     <header
-      className={`flex w-full items-center bg-[#21232F] justify-center sticky top-0 z-40 shadow-sm`}
+      className="flex w-full items-center justify-center sticky top-0 z-40 border-b border-[var(--border-color)] bg-[var(--primary-bg)]"
+      style={{ 
+        backgroundColor: 'rgba(11, 16, 32, 0.95)',
+        backdropFilter: 'blur(8px)'
+      }}
     >
-      <div className="container px-4">
-        <div className="relative flex items-center justify-end">
-          <div className="w-auto max-w-full flex">
-            <div className="flex items-center space-x-4">
-              <Link to={"/"} aria-label="Go to homepage">
-                <img
-                  src="/SynCodex icon.png"
-                  alt="icon"
-                  className="w-17 md:hidden"
-                />
-              </Link>
-              <Link
-                to="/"
-                className="max-md:hidden font-Chakra text-[48px] font-semibold font-gradient"
-              >
+      <div className="w-full px-4 md:px-8">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo Section */}
+          <div className="flex items-center gap-3">
+            <Link to={"/"} aria-label="Go to homepage" className="flex items-center gap-2">
+              <img
+                src="/SynCodex icon.png"
+                alt="SynCodex icon"
+                className="w-10 md:w-12 transition hover:scale-110"
+              />
+              <span className="hidden md:block font-Chakra text-3xl font-semibold gradient-text">
                 SynCodex
-              </Link>
-            </div>
+              </span>
+            </Link>
           </div>
-          <div className="flex w-full items-center justify-around">
-            <div>
-              <button
-                type="button"
-                aria-controls="navbarToggler"
-                name="navbarToggler"
-                title="navbarToggler"
-                onClick={() => setOpen(!open)}
-                id="navbarToggler"
-                className={` ${
-                  open && "navbarTogglerActive"
-                } absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden`}
-              >
-                <span className="relative my-[6px] block h-[2px] w-[30px] bg-white"></span>
-                <span className="relative my-[6px] block h-[2px] w-[30px] bg-white"></span>
-                <span className="relative my-[6px] block h-[2px] w-[30px] bg-white"></span>
-              </button>
-              <nav
-                // :className="!navbarOpen && 'hidden' "
-                id="navbarCollapse"
-                className={`absolute right-4 top-full w-full max-w-[250px] rounded-lg py-7 shadow bg-[#21232F] lg:static lg:block lg:w-full lg:max-w-full lg:shadow-none ${
-                  !open && "hidden"
-                } `}
-              >
-                <div className="flex justify-evenly max-lg:flex-col space-x-8 px-5">
-                  <Link
-                    to="/about"
-                    className="text-white text-center text-2xl font-normal font-open-sans"
-                  >
-                    About Us
-                  </Link>
-                  <Link
-                    to="/contact"
-                    className="text-white text-center text-2xl font-normal font-open-sans"
-                  >
-                    Contact Us
-                  </Link>
-                </div>
-              </nav>
-            </div>
-            <div className="hidden justify-end pr-16 sm:flex lg:pr-0 space-x-4">
-              {!hideStartCoding && (
-                <Link
-                  to="/signup"
-                  className="p-[2.5px] min-w-45 text-center text-white text-xl font-bold font-open-sans bg-gradient-to-b from-[#94FFF2] to-[#506DFF] rounded-2xl transition hover:from-[#506DFF] hover:to-[#94fff2] "
-                >
-                  <div className="bg-[#21232F] max-w-45 py-3 rounded-[calc(16px-2.5px)] xl:py-3 ">
-                    Sign UP
-                  </div>
-                </Link>
-              )}
 
-              {isLoginPage ? (
-                <Link
-                  to="/signup"
-                  className="p-[2.5px] min-w-45 text-center text-white text-xl font-bold font-open-sans bg-gradient-to-b from-[#94FFF2] to-[#506DFF] rounded-2xl transition hover:from-[#506DFF] hover:to-[#94fff2]"
-                >
-                  <div className="bg-[#21232F] max-w-45 py-3 rounded-[calc(16px-2.5px)] xl:py-3 ">
-                    Sign Up
-                  </div>
-                </Link>
-              ) : isSignUpPage ? (
-                <Link
-                  to="/login"
-                  className="p-[2.5px] min-w-45 text-center text-white text-xl font-bold font-open-sans bg-gradient-to-b from-[#94FFF2] to-[#506DFF] rounded-2xl transition hover:from-[#506DFF] hover:to-[#94fff2]"
-                >
-                  <div className="bg-[#21232F] max-w-45 py-3 rounded-[calc(16px-2.5px)] xl:py-3 ">
-                    Login
-                  </div>
-                </Link>
-              ) : (
-                <Link
-                  to="/login"
-                  className="p-[2.5px] min-w-45 text-center text-white text-xl font-bold font-open-sans bg-gradient-to-b from-[#94FFF2] to-[#506DFF] rounded-2xl transition hover:from-[#506DFF] hover:to-[#94fff2]"
-                >
-                  <div className="bg-[#21232F] max-w-45 py-3 rounded-[calc(16px-2.5px)] xl:py-3 ">
-                    Login
-                  </div>
-                </Link>
-              )}
-            </div>
+          {/* Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-8">
+            <Link
+              to="/about"
+              className="text-[var(--secondary-text)] hover:text-[var(--primary-text)] transition"
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className="text-[var(--secondary-text)] hover:text-[var(--primary-text)] transition"
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3">
+            {!hideStartCoding && (
+              <Link to="/signup" className="btn btn-primary hidden sm:inline-flex">
+                Get Started
+              </Link>
+            )}
+
+            {isLoginPage ? (
+              <Link to="/signup" className="btn btn-primary">
+                Sign Up
+              </Link>
+            ) : isSignUpPage ? (
+              <Link to="/login" className="btn btn-primary">
+                Login
+              </Link>
+            ) : (
+              <Link to="/login" className="btn btn-primary">
+                Login
+              </Link>
+            )}
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              aria-controls="navbarToggler"
+              name="navbarToggler"
+              title="Toggle navigation"
+              onClick={() => setOpen(!open)}
+              id="navbarToggler"
+              className={`lg:hidden flex flex-col gap-1.5 p-2 rounded transition ${
+                open ? 'bg-[var(--hover-bg)]' : ''
+              }`}
+            >
+              <span className={`block h-0.5 w-6 bg-[var(--primary-text)] transition transform ${open ? 'rotate-45 translate-y-2' : ''}`}></span>
+              <span className={`block h-0.5 w-6 bg-[var(--primary-text)] transition ${open ? 'opacity-0' : ''}`}></span>
+              <span className={`block h-0.5 w-6 bg-[var(--primary-text)] transition transform ${open ? '-rotate-45 -translate-y-2' : ''}`}></span>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {open && (
+          <nav className="lg:hidden border-t border-[var(--border-color)] py-4 px-4 space-y-3 bg-[var(--secondary-bg)] rounded-b-lg">
+            <Link
+              to="/about"
+              className="block text-[var(--secondary-text)] hover:text-[var(--primary-text)] transition py-2"
+            >
+              About Us
+            </Link>
+            <Link
+              to="/contact"
+              className="block text-[var(--secondary-text)] hover:text-[var(--primary-text)] transition py-2"
+            >
+              Contact Us
+            </Link>
+          </nav>
+        )}
       </div>
     </header>
   );
